@@ -14,7 +14,7 @@ const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerH
 // scene.add(cube);
 const axesHelper = new THREE.AxesHelper(5);
 scene.add(axesHelper);
-const light = new THREE.SpotLight();
+const light = new THREE.PointLight();
 light.position.z = 10;
 scene.add(light);
 
@@ -30,7 +30,6 @@ loader.load("/3d/Square_Rosette.gltf", (gltf) => {
 	const obj = gltf.scene.children[0];
 	camera.lookAt(obj.position);
 	light.position.set(obj.position.x, obj.position.y + 10, obj.position.z + 10);
-	light.lookAt(obj.position);
 	// for (let obj of gltf.scene.children) {
 	// 	const thing = new THREE.Mesh(obj.)
 	// }
