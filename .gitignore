@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# 3d assets - too big for git
+public/3d/*
+!public/3d/.gitkeep
