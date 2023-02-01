@@ -15,7 +15,7 @@ const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerH
 const axesHelper = new THREE.AxesHelper(5);
 scene.add(axesHelper);
 const light = new THREE.PointLight();
-light.position.z = 10;
+light.position.set(0, 10, 10);
 scene.add(light);
 
 camera.position.z = 10;
@@ -23,16 +23,16 @@ camera.position.z = 10;
 const renderer = new THREE.WebGLRenderer();
 loader.load("/3d/Square_Rosette.gltf", (gltf) => {
 	(window as any).gltf = gltf;
-	// const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-	// const thing = new THREE.Mesh((gltf.scene.children[0] as any).geometry, material);
-	// scene.add(thing);
-	scene.add(gltf.scene);
-	const obj = gltf.scene.children[0];
-	camera.lookAt(obj.position);
-	light.position.set(obj.position.x, obj.position.y + 10, obj.position.z + 10);
-	// for (let obj of gltf.scene.children) {
-	// 	const thing = new THREE.Mesh(obj.)
-	// }
+	camera.lookAt(gltf.scene.position);
+	const group = new THREE.Group();
+	for (let obj of gltf.scene.children) {
+		if (isMesh(obj)) {
+			group.add(obj);
+		} else {
+			console.log("Unknown object type: ", obj.type);
+		}
+	}
+	scene.add(group);
 });
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
@@ -42,3 +42,7 @@ function animate() {
 	renderer.render(scene, camera);
 }
 animate();
+
+function isMesh(x: THREE.Object3D): x is THREE.Mesh {
+	return x.type === "Mesh";
+}
