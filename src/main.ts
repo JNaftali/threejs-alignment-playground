@@ -46,7 +46,9 @@ const [rosette_handle_mount_point, rosette_handle_mount_quat] = getWorldPos(
 	rosette.getObjectByName("null_Rosette")!
 );
 const [handle_mount_point, handle_mount_quat] = getWorldPos(handle.getObjectByName("null_Handle")!);
-const RHquat = handle_mount_quat.multiply(rosette_handle_mount_quat.invert());
+const RHquat = handle_mount_quat
+	.multiply(rosette_handle_mount_quat)
+	.multiply(rosette_handle_mount_quat.invert());
 handle.applyQuaternion(RHquat);
 const RHvec = rosette_handle_mount_point.sub(handle_mount_point);
 handle.translateX(RHvec.x);
@@ -69,15 +71,6 @@ function loadModel(name: string) {
 		camera.lookAt(gltf.scene.position);
 		controls.update();
 		return gltf.scene;
-		// const group = new THREE.Group();
-		// group.name = name;
-		// for (let obj of gltf.scene.children) {
-		// 	if (isMesh(obj)) {
-		// 		group.add(obj);
-		// 	} else {
-		// 		console.log("Unknown object type: ", obj.type);
-		// 	}
-		// }
 	});
 }
 
@@ -90,10 +83,6 @@ function animate() {
 	renderer.render(scene, camera);
 }
 animate();
-
-function isMesh(x: THREE.Object3D): x is THREE.Mesh {
-	return x.type === "Mesh";
-}
 
 declare global {
 	interface Window {
